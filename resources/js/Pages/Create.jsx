@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
+import { Button } from 'react-bootstrap';
 
 export default function Create() {
     const [values, setValues] = useState({
@@ -49,6 +50,11 @@ export default function Create() {
                 </div>
 
                 <button type="submit" className="btn btn-primary">Create</button>
+
+                <Button variant="primary">
+            Click me
+        </Button>
+
             </form>
         </div>
     );

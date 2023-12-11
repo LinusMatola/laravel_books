@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react'
 
-export default function EditAuthor({ post }) {
+export default function EditAuthor({ author }) {
     const [values, setValues] = useState({ // Form fields
-        title: post.title,
-        body: post.title
+        name: author.name,
+        email: author.email
     });
 
     function handleChange(e) {
@@ -18,7 +18,7 @@ export default function EditAuthor({ post }) {
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.put(`/post/${post.id}`, values)
+        router.put(`/post/${author.id}`, values)
     }
 
     return (
@@ -27,10 +27,10 @@ export default function EditAuthor({ post }) {
             <hr/>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="title">Title:</label>
-                <input id="title" value={values.title} onChange={handleChange} />
+                <input id="name" value={values.name} onChange={handleChange} />
 
                 <label htmlFor="body">Body:</label>
-                <textarea id="body" value={values.body} onChange={handleChange}></textarea>
+                <input id="email" value={values.email} onChange={handleChange} />
                 <button type="submit">Update</button>
             </form>
         </>

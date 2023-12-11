@@ -68,4 +68,67 @@ class AuthorController extends Controller
             'email' => $request->email,
         ]);
     }
+
+    public function editAuthor(Request $request, int $id){
+        $author = Author::find($id);
+        if(!$author){
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Author found'
+            ], 404);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:191',
+                'email' => 'required|string|unique:authors,email|max:191',
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'status' => 422,
+                    'errors' => $validator->messages()
+                ], 422);
+            }else{
+                $author->update([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email'),
+                ]);
+
+
+                if($author){
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Post updated successfully'
+                    ], 200);
+                }else{
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Somthing went wrong while updating post'
+                    ], 500);
+                }
+            }
+        }
+    }
+
+    public function deleteAuthor(int $id){
+        $author = Author::find($id);
+        if(!$author){
+            return response()->json([
+                'status' => 404,
+                'message' => 'No author found'
+            ], 404);
+        }else{
+                $author->delete();
+                if($author){
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Author deleted successfully'
+                    ], 200);
+                }else{
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Somthing went wrong while deleting the Author'
+                    ], 500);
+                }
+        }
+    }
 }

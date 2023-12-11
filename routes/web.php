@@ -14,3 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::inertia('/', 'Dashboard');
+Route::inertia('/create', 'Create');

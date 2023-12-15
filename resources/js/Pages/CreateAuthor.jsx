@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
 import { Button } from 'react-bootstrap';
 
-export default function Create() {
+export default function CreateAuthor() {
     const [values, setValues] = useState({
         name: "",
         email: ""

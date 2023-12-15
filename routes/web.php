@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthorController;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::inertia('/dashboard', 'Dashboard');
-Route::inertia('/create', 'Create');
-Route::inertia('/edit/{id}', 'EditAuthor');
-Route::inertia('/', 'Authors');
+Route::inertia('/createauthor', 'Create');
+Route::inertia('/editauthor/{id}', 'EditAuthor');
+Route::inertia('/authors/{author}/edit', 'Edit');
+
+
+
+//Route::get('authors/{author}/edit', [AuthorController::class, 'edit']); // New route for editing
+
+//Route::inertia('/authors/{author}/edit', 'Edit')->name('authors.edit');
+Route::get('/', [AuthorController::class, 'index']);
+Route::get('/register-author', [AuthorController::class, 'createauthor']);
+Route::get('/edit/{id}', [AuthorController::class, 'edit']);
+
+Route::inertia('/addbook', 'CreateBook');
+Route::inertia('/books', 'Books');
+
+
+

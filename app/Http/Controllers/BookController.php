@@ -149,4 +149,9 @@ class BookController extends Controller
                 }
         }
     }
+
+    public function createBookView()
+    {
+        return Inertia::render('CreateBook');
+    }
 }

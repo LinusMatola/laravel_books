@@ -19,12 +19,12 @@ class PHPMailerMailer
         $this->mailer->isSMTP();
         $this->mailer->Host = 'smtp.gmail.com';
         $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = 'your-gmail-email@gmail.com'; // Replace with your Gmail email
-        $this->mailer->Password = 'your-gmail-password'; // Replace with your Gmail password
+        $this->mailer->Username = 'linus2769@gmail.com'; // Replace with your Gmail email
+        $this->mailer->Password = 'vmdxgcbwxexrbaei'; // Replace with your Gmail password
         $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use 'tls' or 'ssl' if necessary
         $this->mailer->Port = 587; // Adjust the port if necessary
 
-        $this->mailer->setFrom('your-gmail-email@gmail.com', 'Your Name'); // Replace with your Gmail email and name
+        $this->mailer->setFrom('linus2769@gmail.com', 'Your Name'); // Replace with your Gmail email and name
     }
 
     public function sendEmail($to, $subject, $body)

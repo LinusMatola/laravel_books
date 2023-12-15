@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use App\Mailers\PHPMailerMailer;
+use Inertia\Inertia;
 
 class AuthorController extends Controller
 {
+    public function index(){
+        $authors = Author::all();
+        return Inertia::render('Authors', ['authors' => $authors]);
+    }
     public function authors(){
         $authors = Author::all();
 
@@ -22,26 +28,14 @@ class AuthorController extends Controller
             ], 404);
         }
     }
-    public function index()
-    {
-        return Inertia::render('Index', [
-            'authors' => Author::all()
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createauthor()
     {
-        return Inertia::render('Create');
+        return Inertia::render('CreateAuthor');
     }
 
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // We will make this function without any validation
@@ -51,23 +45,6 @@ class AuthorController extends Controller
         ]);
     }
 
-    public function edit(Author $author)
-    {
-        return Inertia::render('Edit', [
-            'author' => $author
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Author $author)
-    {
-        $author->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-    }
 
     public function editAuthor(Request $request, int $id){
         $author = Author::find($id);
@@ -107,6 +84,7 @@ class AuthorController extends Controller
                 }
             }
         }
+
     }
 
     public function deleteAuthor(int $id){
@@ -131,4 +109,42 @@ class AuthorController extends Controller
                 }
         }
     }
+
+    public function updateauthor(Request $request, Author $content) {
+        return Inertia::render('EditAuthor',[
+            'author' => [
+                'id' => $content->id,
+                'name' => $content->name,
+                'email' => $content->email,
+            ],
+        ]);
+    }
+
+    public function sendemail(Request $request)
+    {
+        sendEmail($request->email,'TEST', 'BODY TEST');
+    }
+
+    // public function edit($id)
+    // {
+    //     $author = Author::find($id);
+
+    //     if($author->count() > 0){
+    //         return Inertia::render('Edit', [
+    //             'author' => $author
+    //         ]);
+    //     }else{
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'No records found'
+    //         ], 404);
+    //     }
+    // }
+
+    public function edit($id)
+    {
+        $author = Author::find($id);
+        return Inertia::render('Edit', ['author' => $author]);
+    }
+
 }

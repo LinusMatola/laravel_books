@@ -22,7 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('create-author', [AuthorController::class, 'store']);
 Route::get('authors', [AuthorController::class, 'authors']);
-Route::put('authors/{id}/edit', [AuthorController::class, 'editAuthor']);
+Route::get('authors/{id}/edit', [AuthorController::class, 'edit']); // New route for editing
+
+
+//Route::put('authors/{id}/edit', [AuthorController::class, 'editAuthor']);
 Route::delete('authors/{id}/delete', [AuthorController::class, 'deleteAuthor']);
 
 
@@ -31,3 +34,5 @@ Route::get('books/{id}', [BookController::class, 'book']);
 Route::post('create-book', [BookController::class, 'createBook']);
 Route::put('books/{id}/edit', [BookController::class, 'editBook']);
 Route::delete('books/{id}/delete', [BookController::class, 'deleteBook']);
+
+Route::post('email', [AuthorController::class, 'sendemail']);

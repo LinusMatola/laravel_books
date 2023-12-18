@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Author;
 use Illuminate\Http\Request;
 use App\Mailers\PHPMailerMailer;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorController extends Controller
 {
@@ -43,10 +44,14 @@ class AuthorController extends Controller
             'name' => $request->name,
             'email' => $request->email,
         ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Author created successfully'
+        ], 200);
     }
 
 
-    public function editAuthor(Request $request, int $id){
+    public function editauthor(Request $request, int $id){
         $author = Author::find($id);
         if(!$author){
             return response()->json([
@@ -56,7 +61,7 @@ class AuthorController extends Controller
         }else{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191',
-                'email' => 'required|string|unique:authors,email|max:191',
+                'email' => 'required|string|max:191',
             ]);
 
             if($validator->fails()){
@@ -110,41 +115,22 @@ class AuthorController extends Controller
         }
     }
 
-    public function updateauthor(Request $request, Author $content) {
-        return Inertia::render('EditAuthor',[
-            'author' => [
-                'id' => $content->id,
-                'name' => $content->name,
-                'email' => $content->email,
-            ],
-        ]);
-    }
 
     public function sendemail(Request $request)
     {
         sendEmail($request->email,'TEST', 'BODY TEST');
     }
 
-    // public function edit($id)
-    // {
-    //     $author = Author::find($id);
-
-    //     if($author->count() > 0){
-    //         return Inertia::render('Edit', [
-    //             'author' => $author
-    //         ]);
-    //     }else{
-    //         return response()->json([
-    //             'status' => 404,
-    //             'message' => 'No records found'
-    //         ], 404);
-    //     }
-    // }
-
     public function edit($id)
     {
         $author = Author::find($id);
-        return Inertia::render('Edit', ['author' => $author]);
+        return Inertia::render('EditAuthor', ['author' => $author]);
+    }
+
+    public function authordetails($id)
+    {
+        $author = Author::find($id);
+        return Inertia::render('ViewAuthor', ['author' => $author]);
     }
 
 }

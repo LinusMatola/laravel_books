@@ -3,54 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Inertia\Inertia;
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
+    public function home(){
+        return Inertia::render('Home');
+    }
     public function books(){
         $books = Book::all();
-
-        if($books->count() > 0){
-            return response()->json([
-                'status' => 200,
-                'data' => $books
-            ], 200);
-        }else{
-            return response()->json([
-                'status' => 404,
-                'message' => 'No records found'
-            ], 404);
-        }
+        return Inertia::render('Books', ['books' => $books]);
     }
 
-    public function book($id){
+    public function bookdetails($id){
         $book = Book::with('author')->find($id);
-
-        if($book){
-            return response()->json([
-                'status' => 200,
-                'data' => $book
-            ], 200);
-        }else{
-            return response()->json([
-                'status' => 404,
-                'message' => 'No record found'
-            ], 404);
-        }
+        $authors = Author::all();
+        return Inertia::render('ViewBook', ['book' => $book, 'authors' => $authors]);
     }
 
-    public function createbook(Request $request){
-        $author_id = $request->input('author_id');
-        $author = Author::find($author_id);
+    public function createbook()
+    {
+        $authors = Author::all();
+        return Inertia::render('CreateBook', ['authors' => $authors]);
+    }
 
-        if(!$author){
-            return response()->json([
-                'status' => 404,
-                'message' => 'Author does not exists'
-            ], 404);
-        }else{
+    public function registerbook(Request $request){
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191',
                 'ISBN' => 'required|unique:books,ISBN|numeric|digits:13',
@@ -82,22 +65,22 @@ class BookController extends Controller
                     ], 500);
                 }
             }
-        }
 
+
+    }
+    public function edit($id){
+        $book = Book::with('author')->find($id);
+        $authors = Author::all();
+        return Inertia::render('EditBook', ['book' => $book, 'authors' => $authors]);
     }
 
     public function editbook(Request $request, int $id){
         $book = Book::find($id);
-        if(!$book){
-            return response()->json([
-                'status' => 404,
-                'message' => 'No book found'
-            ], 404);
-        }else{
+        {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191',
                 'ISBN' => 'required|numeric|digits:13',
-                'author' => 'required|string|max:191'
+                'author_id' => 'required|string|max:191'
             ]);
 
             if($validator->fails()){
@@ -109,15 +92,14 @@ class BookController extends Controller
                 $book->update([
                     'name' => $request->input('name'),
                     'ISBN' => $request->input('ISBN'),
-                    'author' => $request->input('author'),
+                    'author_id' => $request->input('author_id'),
                 ]);
 
 
                 if($book){
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'book updated successfully'
-                    ], 200);
+                    Session::flash('success', 'Book updated successfully');
+                    return Inertia::location(route('books'));
+
                 }else{
                     return response()->json([
                         'status' => 500,

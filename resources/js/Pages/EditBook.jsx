@@ -1,28 +1,41 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Link } from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia';
+import { usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
-export default function CreateBook({authors}) {
+export default function EditBook({book, authors, success}) {
     const [name, setName] = useState("");
     const [ISBN, setISBN] = useState("");
     const [author_id, setAuthor_id] = useState("");
+    const { flash } = usePage().props
+
+    useEffect(()=>{
+        setName(book.name);
+        setISBN(book.ISBN);
+        setAuthor_id(book.author_id);
+    }, [])
 
 
     function handleSubmit(e) {
         e.preventDefault();
         const data = {name, ISBN, author_id};
         console.log(data);
-        Inertia.post("/save-book", data);
-        //router.post('/api/create-book', values);
+        Inertia.put(`/book/${book.id}`, data);
     }
 
     return (
         <Fragment>
             <div className="lg:m-10">
   <form onSubmit={handleSubmit} className="relative border border-gray-100 space-y-3 max-w-screen-md mx-auto rounded-md bg-white p-6 shadow-xl lg:p-10">
-  <h1 className="mb-6 text-xl font-semibold lg:text-2xl">Register Book Details</h1>
+  <Link href="/books"><button className="w-sm bg-gray-900 px-4 py-1.5 text-white transition hover:bg-gray-700">Back to Books</button></Link>
 
+  <h1 className="mb-6 text-xl font-semibold lg:text-2xl">Edit Book Details</h1>
 
+  {flash.success && (
+        <div className="bg-green-200 p-4 mb-4">
+          {flash.success}
+        </div>
+      )}
   <div>
     <label className=""> Book Name </label>
     <input type="text"
@@ -49,7 +62,7 @@ export default function CreateBook({authors}) {
                 onChange={(e) => setAuthor_id(e.target.value)}
                 className="mt-1 p-2 border border-gray-100 rounded-md w-full"
               >
-                <option value="" disabled selected>Select an author</option>
+                <option value="" disabled>Select an author</option>
                 {authors.map((author) => (
                   <option key={author.id} value={author.id}>
                     {author.name}
@@ -62,8 +75,9 @@ export default function CreateBook({authors}) {
 
 
   <div>
-    <button type="submit" className="mt-5 w-full rounded-md bg-green-600 p-2 text-center font-semibold text-white">Register Book</button>
-  </div>
+  <button type='submit' className="w-sm bg-green-700 px-4 py-1.5 text-white transition hover:bg-green-600">Save Book Details</button>
+
+    </div>
 </form>
 
         </div>

@@ -1,61 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { router } from '@inertiajs/react';
-import { Button } from 'react-bootstrap';
+import { Link } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function CreateAuthor() {
-    const [values, setValues] = useState({
-        name: "",
-        email: ""
-    });
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
 
-    function handleChange(e) {
-        const key = e.target.id;
-        const value = e.target.value;
-        setValues((values) => ({
-            ...values,
-            [key]: value,
-        }));
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
-        router.post('/api/create-author', values);
+        const data = {name, email};
+        console.log(data);
+        Inertia.post('/author', data);
     }
 
+
     return (
-        <div className="container mt-5">
-            <h1>Create Author</h1>
-            <hr />
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Name:</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        value={values.name}
-                        onChange={handleChange}
-                    />
-                </div>
+        <Fragment>
+            <div className="lg:m-10">
 
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email:</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        value={values.email}
-                        onChange={handleChange}
-                    />
-                </div>
+  <form onSubmit={handleSubmit} className="relative border border-gray-100 space-y-3 max-w-screen-md mx-auto rounded-md bg-white p-6 shadow-xl lg:p-10">
+  <Link href="/authors"><button className="w-sm bg-gray-900 px-4 py-1.5 text-white transition hover:bg-gray-700">Back to Authors</button></Link>
 
-                <button type="submit" className="btn btn-primary">Create</button>
+  <h1 className="mb-6 text-xl font-semibold lg:text-2xl">Author Details</h1>
 
-                <Button variant="primary">
-            Click me
-        </Button>
+  <div>
+    <label className=""> Author Name </label>
+    <input type="text"
+        id="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter author name" className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3" required/>
+  </div>
+  <div>
+    <label className=""> Email </label>
+    <input type="text"
+        id="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter email" className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3" required/>
+  </div>
 
-            </form>
+  <div>
+  <button type='submit' className="w-sm bg-green-700 px-4 py-1.5 text-white transition hover:bg-green-600">Register Author</button>
+
+  </div>
+
+</form>
+
         </div>
+        </Fragment>
     );
 }
